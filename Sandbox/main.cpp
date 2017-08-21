@@ -3,24 +3,27 @@
 #include <tuple>
 #include <string>
 
-template<typename T>
-bool pair_comparer(T a) {
-	return false;
-}
+template <class... Ts> struct tuple {}; // Base case
 
-template<typename T1, typename T2>
-bool pair_comparer(T1 a, T2 b) {
-	return std::common_type<T1, T2>::type(a) == std::common_type<T1, T2>::type(b);
-}
+template <class T, class... Ts>
+struct tuple<T, Ts...> : tuple<Ts...> { // tuple<T, Ts...> is inherited from tuple<Ts...>
+	tuple(T t, Ts... ts) : tuple<Ts...>(ts...), tail(t) {} // Constructor with initializer list
 
-template<typename T1, typename T2, typename... Args>
-bool pair_comparer(T1 a, T2 b, Args... args) {
-	return std::common_type<T1, T2>::type(a) == std::common_type<T1, T2>::type(b) && pair_comparer(args...);
-}
+	T tail;
+};
+
+template <class T, class... Ts>
+struct elem_type_holder<0, tuple<T, Ts...>> {
+	typedef T type;
+};
+
+template <size_t, class T, class... Ts>
+struct elem_type_holder<k, tuple<T, Ts...>> {
+	typedef typename elem_type_holder<k - 1, tuple<Ts...>>::type type;
+};
 
 int main() {
-	bool temp = pair_comparer(3, 3.0f, 4, 4.0f);
-		
-	int a = 1;
+	tuple<double, uint64_t, const char*> t1(12.2, 42, "big");
+	int t = 1;
 }
 
