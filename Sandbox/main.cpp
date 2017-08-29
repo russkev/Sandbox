@@ -42,6 +42,28 @@ typename std::enable_if<
 }
 
 
+template<class T>
+struct listType {
+	bool isEmpty() const;
+	bool isFull() const;
+	bool search(const T&) const;
+	void insert(const T&);
+	void remove(const T&);
+	void destroyList();
+	void printList();
+	listType();
+private:
+	T list[100];
+	int length;
+};
+
+template <class T>
+void listType<T>::insert(const T& newElement) {
+	//function stuff
+}
+
+
+
 
 int main() {
 	tuple<double, uint64_t, const char*> t1(12.2, 42, "big");
