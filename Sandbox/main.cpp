@@ -4,18 +4,22 @@
 #include <string>
 #include <array>
 
-template <typename T, int N>
-struct Array_type {
-	using type = T;
-	static const int dim = N;
+template <typename ...Args> 
+struct Args_Test {};
+
+template <typename T, typename ...Args>
+struct Args_Test<T, Args...> : Args_Test<Args...> {
+	Args_Test(T first, Args ...args) :
+		Args_Test<Args...>(args...),
+		tail(first)
+	{}
+	T tail;
 };
 
 
 
 int main() {
-	using Array = Array_type<int, 3>;
-	Array::type x;						// x is an int
-	constexpr int s = Array::dim;		// s is 3
-	int a = 1;
+	Args_Test<int, float, char> test(3, 2.5, 'c');
+	int a = 4;
 }
 
