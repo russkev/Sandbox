@@ -4,22 +4,28 @@
 #include <string>
 #include <array>
 
-template <typename ...Args> 
-struct Args_Test {};
+//https://www.murrayc.com/permalink/2015/12/05/modern-c-variadic-template-parameters-and-tuples/
 
-template <typename T, typename ...Args>
-struct Args_Test<T, Args...> : Args_Test<Args...> {
-	Args_Test(T first, Args ...args) :
-		Args_Test<Args...>(args...),
-		tail(first)
-	{}
-	T tail;
+template <class... T_values>
+class Base {
+	virtual void something(T_values... values) = 0;
+};
+
+class Derived1 : public Base<int, short, double> {
+public:
+	void something(int a, short b, double c) override;
+};
+
+class Derived2 : public Base<std::string, char> {
+	void something(std::string a, char b) override;
 };
 
 
 
+
+
 int main() {
-	Args_Test<int, float, char> test(3, 2.5, 'c');
-	int a = 4;
+	Base.something(int a);
+
 }
 
