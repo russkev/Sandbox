@@ -34,23 +34,36 @@
 //	return sizeof(t);
 //}
 
-template <class Tuple, size_t... Is>
-constexpr auto take_front_impl(Tuple t, std::index_sequence<Is...>) {
-	return make_tuple(get<Is>(t)(t)...)
+//template <class Tuple, size_t... Is>
+//constexpr auto take_front_impl(Tuple t, std::index_sequence<Is...>) {
+//	return make_tuple(get<Is>(t)(t)...)
+//}
+//
+//template <size_t N, class Tuple>
+//constexpr auto take_front(Tuple t) {
+//	return take_front_impl(t, std::make_index_sequence<N>{});
+//}
+
+template <typename T, typename ...Args>
+T t1(T t, Args... args) {
+	return t1(args...);
 }
 
-template <size_t N, class Tuple>
-constexpr auto take_front(Tuple t) {
-	return take_front_impl(t, std::make_index_sequence<N>{});
+template <typename T>
+T t1(T t) {
+	return t;
 }
-
 
 
 int main() {
+	int a = 1;
+	float b = 2.3f;
+	double c = 4.65;
+	auto test = t1(a, b, c);
+
 	std::tuple<int, char, float>t1 ( 2, 'a', 5.6f );
-	std::make_index_sequence<4>;
 	//function(t1, index_sequence<0,1,2>);
-	int a = 8;
+	int z = 8;
 
 }
 
