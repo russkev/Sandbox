@@ -15,7 +15,7 @@ struct StaticArray
 {
 	//enum {N = 4};
 	enum { N = sizeof...(Entries) };
-	//size_t m_size = sizeof... (Entries);
+	size_t m_size = sizeof... (Entries);
 	size_t m_array [N] = { Entries... };
 };
 
