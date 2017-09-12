@@ -19,7 +19,7 @@ struct StaticArray
 };
 
 template<typename... Args>
-struct find_biggest {};
+struct find_biggest;
 
 //If there is only one thing, it is the biggest
 template<typename First>
@@ -40,6 +40,19 @@ struct find_biggest<First, Args...>
 	>::type type;
 };
 
+template <typename... Args>
+struct find_last;
+
+template <typename First>
+struct find_last<First> {
+	typedef First type;
+};
+
+template <typename First, typename... Args>
+struct find_last<First, Args...> {
+	typedef typename find_last<Args...>::type type;
+};
+
 
 
 int main() {
@@ -49,8 +62,10 @@ int main() {
 	StaticArray<3, 4, 5, 8, 9, 10> sa1;
 
 	typedef find_biggest<char, float, double>::type fb_type;
+	typedef find_last<int, double, char>::type ff_type;
 
 	fb_type fb2 = 23;
+	ff_type ff2 = 24;
 
 	std::tuple<int, char, float>t1 ( 2, 'a', 5.6f );
 	//function(t1, index_sequence<0,1,2>);
