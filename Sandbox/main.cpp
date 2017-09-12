@@ -3,6 +3,7 @@
 #include <tuple>
 #include <string>
 #include <array>
+#include <vector>
 
 //https://www.murrayc.com/permalink/2015/12/05/modern-c-variadic-template-parameters-and-tuples/
 //http://aherrmann.github.io/programming/2016/02/28/unpacking-tuples-in-cpp14/
@@ -14,9 +15,10 @@ template<size_t... Entries>
 struct StaticArray
 {
 	//enum {N = 4};
-	enum { N = sizeof...(Entries) };
+	//enum { N = sizeof...(Entries) };
 	//size_t m_size = sizeof... (Entries);
-	size_t m_array [N] = { Entries... };
+	std::vector<size_t> m_vec = { Entries... };
+	size_t m_array [sizeof...(Entries)] = { Entries... };
 };
 
 
