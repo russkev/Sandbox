@@ -32,12 +32,12 @@ struct find_biggest<First>
 template <typename First, typename... Args>
 struct find_biggest<First, Args...>
 {
-	typedef typename find_biggest<Args...>::type next;
-	typedef typename std::conditional<
+	using next = typename find_biggest<Args...>::type;
+	using type = typename std::conditional<
 		sizeof(First) >= sizeof(next),
 		First,
 		next
-	>::type type;
+	>::type;
 };
 
 template <typename... Args>
@@ -62,7 +62,7 @@ int main() {
 	StaticArray<3, 4, 5, 8, 9, 10> sa1;
 
 	typedef find_biggest<char, float, double>::type fb_type;
-	typedef find_last<int, double, char>::type ff_type;
+	using ff_type = find_last<int, double, char>::type;
 
 	fb_type fb2 = 23;
 	ff_type ff2 = 24;
