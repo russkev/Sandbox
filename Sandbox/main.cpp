@@ -5,6 +5,8 @@
 #include <array>
 #include <vector>
 #include <assert.h>
+#include <algorithm>
+#include <type_traits>
 
 /* WEBSITES
 https://www.murrayc.com/permalink/2015/12/05/modern-c-variadic-template-parameters-and-tuples/
@@ -38,10 +40,7 @@ l = 3  y
 */
 
 
-/* VARIADIC TUPLE EXAMPLE */
-//template <size_t... Is>
-//struct index_sequence;
-
+/* VARIADIC TUPLE EXAMPLE
 
 template<class Tuple, size_t... Is>
 constexpr auto take_front_impl(Tuple t, std::index_sequence<Is...>) {
@@ -51,6 +50,26 @@ constexpr auto take_front_impl(Tuple t, std::index_sequence<Is...>) {
 template <size_t N, class Tuple>
 constexpr auto take_front(Tuple t) {
 	return take_front_impl(t, std::make_index_sequence<N>{});
+}
+*/
+
+/* VARIADIC LAMBDA*/
+template <class F, size_t... Is>
+constexpr auto index_apply_impl(F f, std::index_sequence<Is...>) {
+	return f(std::integral_constant<size_t, Is>{}...);
+}
+
+template <size_t N, class F>
+constexpr auto index_apply(F f){
+	return index_apply_impl(f, std::make_index_sequence<N>{});
+}
+
+
+template <size_t N, class Tuple>
+constexpr auto take_front(Tuple t) {
+	return index_apply<N>([&](auto... Is) {
+		return std::make_tuple(std::get<Is>(t)...);
+	});
 }
 
 /* INDEX SEQUENCES
@@ -113,15 +132,26 @@ int main() {
 
 		auto t = take_front<2>(std::make_tuple(1,2,3,4));
 		//size_t temp = take_front(std::make_tuple(1, 2, 3, 4 ));
-		assert(t == std::make_tuple(1, 2));
+		//assert(t == std::make_tuple(1, 2));
 
 		//std::tuple<int, bool, char> t2 = std::make_tuple(1, true, 'a');
 
 		//int n = std::get<0>(t2);
 		int x = 1;
-
+		
 	}
 
+	{
+		/* VRIADIC LABDA */
+		auto minabs = [](auto... xs) {
+			return std::min({ abs(xs)... });
+		};
+
+		assert(1 == minabs(-1, 2, -3));
+		int x = 0;
+
+
+	}
 	
 	{
 		/* INDEX SEQUENCE EXAMPLE
