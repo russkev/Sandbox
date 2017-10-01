@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <assert.h>
 
 /* WEBSITES
 https://www.murrayc.com/permalink/2015/12/05/modern-c-variadic-template-parameters-and-tuples/
@@ -37,23 +38,22 @@ l = 3  y
 */
 
 
-/* VARIADIC TUPLE EXAMPLE
-template <size_t... Is>
-struct index_sequence;
+/* VARIADIC TUPLE EXAMPLE */
+//template <size_t... Is>
+//struct index_sequence;
 
 
 template<class Tuple, size_t... Is>
-constexpr auto take_front_impl(Tuple t, index_sequence<Is...>) {
-	return make_tuple(std::get<Is>(t)...);
+constexpr auto take_front_impl(Tuple t, std::index_sequence<Is...>) {
+	return std::make_tuple(std::get<Is>(t)...);
 }
 
 template <size_t N, class Tuple>
 constexpr auto take_front(Tuple t) {
-	return take_front_impl(t, std::make_index_sequence<N>{})
+	return take_front_impl(t, std::make_index_sequence<N>{});
 }
-*/
 
-/* INDEX SEQUENCES */
+/* INDEX SEQUENCES
 
 static void func(double d, float f, int i) {
 	std::cout
@@ -75,12 +75,7 @@ static void tuple_call(F f, std::tuple<Ts...> tup) {
 	std::cout << INDICES << "\n";
 	tuple_call(f, tup, std::make_index_sequence<INDICES>{});
 }
-
-
-
-
-
-
+*/
 
 /* VARIADIC EXAMPLE
 template<typename... Args>
@@ -113,27 +108,30 @@ int main() {
 	}
 
 	{
-		/* VARIADIC TUPLE EXAMPLE
+		/* VARIADIC TUPLE EXAMPLE */
 		std::tuple<int, int, int, int> tupleTest(1, 2, 3, 4);
 
-		auto t1 = take_front<2>(tupleTest);
-		//assert(t = make_tuple(1, 2));
+		auto t = take_front<2>(std::make_tuple(1,2,3,4));
+		//size_t temp = take_front(std::make_tuple(1, 2, 3, 4 ));
+		assert(t == std::make_tuple(1, 2));
 
-		std::tuple<int, bool, char> t2 = std::make_tuple(1, true, 'a');
+		//std::tuple<int, bool, char> t2 = std::make_tuple(1, true, 'a');
 
-		int n = std::get<0>(t2);
-		*/
+		//int n = std::get<0>(t2);
+		int x = 1;
+
 	}
 
 	
 	{
-		/* INDEX SEQUENCE EXAMPLE*/
+		/* INDEX SEQUENCE EXAMPLE
 		//func(1.0, 2.0f, 3);
 
 		std::tuple<double, float, int> tup(4.0, 5.0f, 6);
 		tuple_call(func, tup);
 
 		int x = 1;
+		*/
 	}
 	int x = 1;
 }
