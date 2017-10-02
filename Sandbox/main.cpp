@@ -127,7 +127,7 @@ int main() {
 	}
 
 	{
-		/* VARIADIC TUPLE EXAMPLE */
+		/* VARIADIC TUPLE EXAMPLE
 		std::tuple<int, int, int, int> tupleTest(1, 2, 3, 4);
 
 		auto t = take_front<2>(std::make_tuple(1,2,3,4));
@@ -138,20 +138,40 @@ int main() {
 
 		//int n = std::get<0>(t2);
 		int x = 1;
-		
+		*/
 	}
 
 	{
 		/* VRIADIC LABDA */
-		auto minabs = [](auto... xs) {
-			return std::min({ abs(xs)... });
+		//std::vector<int> items = { 3,50,105,1436 };
+		//int factor = 10;
+		//auto foundItem = std::find_if(items.begin(), items.end(),
+		//	[&factor](int const& b) {
+		//	return b * factor == 100;
+		//});
+
+		//auto maxElementSize = std::max(items.begin(), items.end(),
+		//	[](auto a, auto b) {
+		//	return (sizeof(a) > sizeof(b));
+		//});
+
+
+		int first = 5;
+		int second = 6;
+		auto added = [](auto first, auto second) {
+			result = first + second;
+			return result;
 		};
 
-		assert(1 == minabs(-1, 2, -3));
+		//auto minabs = [](auto... xs) {
+		//	return std::min({ abs(xs)... });
+		//};
+
+		//assert(1 == minabs(-1, 2, -3));
 		int x = 0;
-
-
+		
 	}
+
 	
 	{
 		/* INDEX SEQUENCE EXAMPLE
