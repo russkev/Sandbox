@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <type_traits>
+#include <functional>
 
 /* WEBSITES
 https://www.murrayc.com/permalink/2015/12/05/modern-c-variadic-template-parameters-and-tuples/
@@ -70,6 +71,12 @@ constexpr auto take_front(Tuple t) {
 	return index_apply<N>([&](auto... Is) {
 		return std::make_tuple(std::get<Is>(t)...);
 	});
+}
+
+void run_within_for_each(std::function<void(int)> func) {
+	std::vector<int> numbers{ 1, 2, 3, 4, 5, 10, 15, 20, 25, 35, 45, 50 };
+
+	for_each(numbers.begin(), numbers.end(), func);
 }
 
 /* INDEX SEQUENCES
@@ -143,33 +150,8 @@ int main() {
 
 	{
 		/* VRIADIC LABDA */
-		//std::vector<int> items = { 3,50,105,1436 };
-		//int factor = 10;
-		//auto foundItem = std::find_if(items.begin(), items.end(),
-		//	[&factor](int const& b) {
-		//	return b * factor == 100;
-		//});
-
-		//auto maxElementSize = std::max(items.begin(), items.end(),
-		//	[](auto a, auto b) {
-		//	return (sizeof(a) > sizeof(b));
-		//});
-
-
-		int first = 5;
-		int second = 6;
-		auto added = [](auto first, auto second) {
-			auto result = first + second;
-			return result;
-		};
-		auto addedB = added(first, second);
-		//auto minabs = [](auto... xs) {
-		//	return std::min({ abs(xs)... });
-		//};
-
-		//assert(1 == minabs(-1, 2, -3));
-		int x = 0;
-		
+		auto func1 = [](int a) {std::cout << a * 10 << "\n"; };
+		run_within_for_each([](int a) {std::cout << a * 10 << "\n"; });
 	}
 
 	
