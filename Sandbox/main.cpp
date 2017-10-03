@@ -159,10 +159,10 @@ int main() {
 		int first = 5;
 		int second = 6;
 		auto added = [](auto first, auto second) {
-			result = first + second;
+			auto result = first + second;
 			return result;
 		};
-
+		auto addedB = added(first, second);
 		//auto minabs = [](auto... xs) {
 		//	return std::min({ abs(xs)... });
 		//};
