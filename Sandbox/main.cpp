@@ -55,28 +55,58 @@ constexpr auto take_front(Tuple t) {
 */
 
 /* VARIADIC LAMBDA*/
+
+// Index Apply Implementation
 template <class F, size_t... Is>
 constexpr auto index_apply_impl(F f, std::index_sequence<Is...>) {
 	return f(std::integral_constant<size_t, Is>{}...);
 }
 
+// Index Apply
 template <size_t N, class F>
 constexpr auto index_apply(F f){
 	return index_apply_impl(f, std::make_index_sequence<N>{});
 }
 
+// Apply1 Implementation
+template <class Tuple, class F, size_t... Is>
+constexpr auto apply_impl(Tuple t, F f, std::index_sequence<Is...>) {
+	return f(std::get<Is>(t)...);
+}
 
+// Apply1
+template <class Tuple, class F>
+constexpr auto apply(Tuple t, F f) {
+	return apply_impl(
+		t, f, std::make_index_sequence < std::tuple_size<Tuple>::value > {});
+}
+
+// Apply2
+template <class Tuple, class F>
+constexpr auto apply2(Tuple T, F f) {
+	return index_apply< std::tuple_size<Tuple>::value > (
+		[&T, &f](auto... Is) {
+		return f(std::get<Is>(T)...); 
+	});
+}
+
+// Take Front
 template <size_t N, class Tuple>
 constexpr auto take_front(Tuple t) {
-	return index_apply<N>([&](auto... Is) {
+	return index_apply<N>(
+		[&](auto... Is) {
 		return std::make_tuple(std::get<Is>(t)...);
 	});
 }
 
-void run_within_for_each(std::function<void(int)> func) {
-	std::vector<int> numbers{ 1, 2, 3, 4, 5, 10, 15, 20, 25, 35, 45, 50 };
-
-	for_each(numbers.begin(), numbers.end(), func);
+// Reverse
+template <class Tuple>
+constexpr auto reverse(Tuple T) {
+	return index_apply<std::tuple_size<Tuple>::value>(
+		[&](auto... Is) {
+		return std::make_tuple(
+			std::get<std::tuple_size<Tuple>::value - 1 - Is>(T)...);
+	});
 }
 
 /* INDEX SEQUENCES
@@ -134,10 +164,21 @@ int main() {
 	}
 
 	{
-		/* VARIADIC TUPLE EXAMPLE
+		/* VARIADIC TUPLE EXAMPLE*/
 		std::tuple<int, int, int, int> tupleTest(1, 2, 3, 4);
 
-		auto t = take_front<2>(std::make_tuple(1,2,3,4));
+		auto x0 = take_front<2>(std::make_tuple(1,2,3,4));
+
+		auto x1 = apply(std::make_tuple(1, 2), std::plus<>{});
+
+		auto x2 = apply2(std::make_tuple(1, 2), std::plus<>{});
+
+		auto x3 = apply2(std::make_tuple(2, 3, 4), [](int x, int y, int z) {return x*y*z; });
+
+		auto x4 = reverse(std::make_tuple(4, 7, 8));
+
+		//!!!Try and make the template specific to tuples
+
 		//size_t temp = take_front(std::make_tuple(1, 2, 3, 4 ));
 		//assert(t == std::make_tuple(1, 2));
 
@@ -145,13 +186,6 @@ int main() {
 
 		//int n = std::get<0>(t2);
 		int x = 1;
-		*/
-	}
-
-	{
-		/* VRIADIC LABDA */
-		auto func1 = [](int a) {std::cout << a * 10 << "\n"; };
-		run_within_for_each([](int a) {std::cout << a * 10 << "\n"; });
 	}
 
 	
