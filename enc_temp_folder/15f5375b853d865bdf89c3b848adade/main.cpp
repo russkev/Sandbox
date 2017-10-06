@@ -189,23 +189,7 @@ int main() {
 		auto x4 = reverse(std::make_tuple(4, 7, 8));
 
 		auto x5 = take_back<2>(std::make_tuple(1, 2, 3, 4, 5, 6, 7));
-
-		auto x6 = zip(
-			std::make_tuple(1, 2),
-			std::make_tuple(3, 4),
-			std::make_tuple(5, 6));
-
-		assert(x6 == std::make_tuple(
-			std::make_tuple(1, 3, 5),
-			std::make_tuple(2, 4, 6)));
-
-		auto x7 = zip(
-			std::make_tuple(1, 2, 3),
-			std::make_tuple(4));
-
-		assert(x7 == std::make_tuple(std::make_tuple(1, 2)));
-
-
+		//auto a2 = a1::type;
 
 		//size_t temp = take_front(std::make_tuple(1, 2, 3, 4 ));
 		//assert(t == std::make_tuple(1, 2));
