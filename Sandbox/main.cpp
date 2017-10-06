@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <functional>
+#include <utility>
 
 /* WEBSITES
 https://www.murrayc.com/permalink/2015/12/05/modern-c-variadic-template-parameters-and-tuples/
@@ -65,7 +66,7 @@ constexpr auto index_apply_impl(F f, std::index_sequence<Is...>) {
 // Index Apply
 template <size_t N, class F>
 constexpr auto index_apply(F f){
-	return index_apply_impl(f, std::make_index_sequence<N>{});
+	return index_apply_impl(f, std::declval<std::make_index_sequence<N>>());
 }
 
 // Apply1 Implementation
@@ -91,8 +92,8 @@ constexpr auto apply2(Tuple T, F f) {
 }
 
 // Take Front
-template <size_t N, class Tuple>
-constexpr auto take_front(Tuple t) {
+template <size_t N, class... Ts>
+constexpr auto take_front(std::tuple<Ts...> t) {
 	return index_apply<N>(
 		[&](auto... Is) {
 		return std::make_tuple(std::get<Is>(t)...);
@@ -105,7 +106,16 @@ constexpr auto reverse(Tuple T) {
 	return index_apply<std::tuple_size<Tuple>::value>(
 		[&](auto... Is) {
 		return std::make_tuple(
-			std::get<std::tuple_size<Tuple>::value - 1 - Is>(T)...);
+			std::get < std::tuple_size<Tuple>{} -1 - Is > (T)...);
+	});
+}
+
+// Take back
+template <size_t N, class... Ts>
+constexpr auto take_back(std::tuple<Ts...> t) {
+	return index_apply<N>(
+		[&](auto... Is) {
+		return std::make_tuple(std::get<sizeof...(Ts) - Is>(t)...);
 	});
 }
 
@@ -176,6 +186,9 @@ int main() {
 		auto x3 = apply2(std::make_tuple(2, 3, 4), [](int x, int y, int z) {return x*y*z; });
 
 		auto x4 = reverse(std::make_tuple(4, 7, 8));
+
+		//auto x5 = take_back<2>(std::make_tuple(1, 2, 3, 4));
+		//auto a2 = a1::type;
 
 		//!!!Try and make the template specific to tuples
 
