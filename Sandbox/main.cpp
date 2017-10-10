@@ -178,22 +178,25 @@ struct Biggest<First, Args...> {
 
 template <typename... Args>
 struct Base {
-	Base(Args... args) :m_values(std::tuple<Args...>(args...)) {};
+	Base(Args... args) :m_tuple(std::tuple<Args...>(args...)) {};
 	
 	void printSizeOfs_impl() {};
 
 	template<typename Head, typename... Tail>
 	void printSizeOfs_impl(const Head & head, const Tail &... tail) {
-		std::cout << sizeof(head) << "\n";
+		for (int i = 0; i < sizeof(head); i++) {
+			std::cout << "I";
+		}
+		std::cout << "\n";
 		printSizeOfs_impl(tail...);
 	}
 
 	void printSizeOfs() {
-		printSizeOfs_impl(std::get<Args>(m_values)...);
+		printSizeOfs_impl(std::get<Args>(m_tuple)...);
 	}
-private:
 
-	std::tuple<Args...> m_values;
+private:
+	std::tuple<Args...> m_tuple;
 };
 
 
