@@ -120,6 +120,19 @@ constexpr auto take_back(T t) {
 	});
 }
 
+
+// Zip
+template <class... Tuples>
+constexpr auto zip(Tuples... ts) {
+	constexpr size_t len = std::min({ std::tuple_size<Tuples>::value... });
+	auto row =
+		[&](auto I) { return std::make_tuple(std::get<I>(ts)...); };
+	return index_apply<len>(
+		[&](auto ...Is) { return std::make_tuple(row(Is)...); });
+}
+
+constexpr auto zip() { return std::make_tuple(); }
+
 /* INDEX SEQUENCES
 
 static void func(double d, float f, int i) {
@@ -160,6 +173,27 @@ struct Biggest<First, Args...> {
 };
 */
 
+/* VARIADIC TMPLATES WITH CLASSES */
+
+
+template <typename... Args>
+struct Base {
+	Base(std::tuple<Args...> t) :m_values(t) {};
+	
+	void printSizeOfs_impl() {};
+
+	template<typename Head, typename... Tail>
+	void printSizeOfs_impl(const Head & head, const Tail &... tail) {
+		std::cout << sizeof(head) << "\n";
+		printSizeOfs_impl(tail...);
+	}
+
+	void printSizeOfs() {
+		printSizeOfs_impl(std::get<Args>(m_values)...);
+	}
+private:
+	std::tuple<Args...> m_values;
+};
 
 
 int main() {
@@ -203,7 +237,7 @@ int main() {
 			std::make_tuple(1, 2, 3),
 			std::make_tuple(4));
 
-		assert(x7 == std::make_tuple(std::make_tuple(1, 2)));
+		assert(x7 == std::make_tuple(std::make_tuple(1, 4)));
 
 
 
@@ -216,7 +250,15 @@ int main() {
 		int x = 1;
 	}
 
-	
+	{
+		auto B0 = std::make_tuple(1, 2.3f, 'a');
+		
+		Base<int, float, char> B1(B0);
+		B1.printSizeOfs();
+
+		int Bx = 1;
+
+	}
 	{
 		/* INDEX SEQUENCE EXAMPLE
 		//func(1.0, 2.0f, 3);
