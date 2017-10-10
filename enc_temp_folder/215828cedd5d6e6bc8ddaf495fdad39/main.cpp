@@ -192,7 +192,6 @@ struct Base {
 		printSizeOfs_impl(std::get<Args>(m_values)...);
 	}
 private:
-
 	std::tuple<Args...> m_values;
 };
 
