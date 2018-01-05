@@ -29,5 +29,6 @@ int main()
 	int a = 5;
 	std::string a2 = GET_VARIABLE_NAME(a);
 
+
 	return 0;
 }
