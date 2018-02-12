@@ -33,7 +33,7 @@
 //}
 
 template<typename T>
-std::vector<T> quickSort(std::vector<T> s_vec)
+std::vector<T> dSort(std::vector<T> s_vec)
 {
 	if (s_vec.size() < 2)
 	{
@@ -59,8 +59,8 @@ std::vector<T> quickSort(std::vector<T> s_vec)
 			v_pivot.push_back(i);
 		}
 	}
-	quickSort(v_greater);
-	quickSort(v_less);
+	dSort(v_greater);
+	dSort(v_less);
 	std::vector<T> outVector;
 
 	outVector.reserve(v_less.size() + v_pivot.size() + v_greater.size());
@@ -78,7 +78,7 @@ int main() {
 	std::vector<int> numList		= { 54, 5, 3, 9, 0, -2, 10, 12, 45, 23, 12, 12, -23, 9, 345, 23 };
 	std::vector<int> sortedList;// = { numList.at(0) };
 
-	sortedList = quickSort(numList);
+	sortedList = dSort(numList);
 
 	//for (auto & i : numList)
 	//{
