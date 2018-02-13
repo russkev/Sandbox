@@ -3,6 +3,19 @@
 
 #include <vector>
 
+
+
+template<typename T>
+std::vector<T> combineThreeVectors(std::vector<T> s_vec_1, std::vector<T> s_vec_2, std::vector<T> s_vec_3)
+{
+	std::vector<T> outVector;
+	outVector.reserve(s_vec_1.size() + s_vec_2.size() + s_vec_3.size());
+	outVector.insert(outVector.end(), s_vec_1.begin(), s_vec_1.end());
+	outVector.insert(outVector.end(), s_vec_2.begin(), s_vec_2.end());
+	outVector.insert(outVector.end(), s_vec_3.begin(), s_vec_3.end());
+	return outVector;
+}
+
 template<typename T>
 void quickSort(std::vector<T>& s_vec)
 {
@@ -10,40 +23,31 @@ void quickSort(std::vector<T>& s_vec)
 	{
 		return;
 	}
-
 	auto pivot = s_vec.at(0);
-	std::vector<T> v_greater;
+
 	std::vector<T> v_less;
+	std::vector<T> v_greater;
 	std::vector<T> v_pivot;
 
 	for (auto & i : s_vec)
 	{
-		if (i > pivot)
-		{
-			v_greater.push_back(i);
-		}
-		else if (i < pivot)
+		if (i < pivot)
 		{
 			v_less.push_back(i);
+		}
+		else if (i > pivot)
+		{
+			v_greater.push_back(i);
 		}
 		else
 		{
 			v_pivot.push_back(i);
 		}
 	}
-	quickSort(v_greater);
 	quickSort(v_less);
-	std::vector<T> outVector;
-
-	outVector.reserve(v_less.size() + v_pivot.size() + v_greater.size());
-	outVector.insert(outVector.end(), v_less.begin(), v_less.end());
-	outVector.insert(outVector.end(), v_pivot.begin(), v_pivot.end());
-	outVector.insert(outVector.end(), v_greater.begin(), v_greater.end());
-
-	s_vec = outVector;
-
+	quickSort(v_greater);
+	s_vec = combineThreeVectors(v_less, v_pivot, v_greater);
 	return;
-
 }
 
 int main() {
